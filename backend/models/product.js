@@ -5,13 +5,30 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Mohon masukkan nama produk'],
         trim: true,
-        maxLength: [100, 'nama produk tidak bolehh lebih dari 100 karakter']
+        maxLength: [100, 'Nama produk tidak boleh lebih dari 100 karakter']
+    },
+
+    jenis: {
+        type: String,
+        required: true,
+        enum: ['Medium', 'Premium'], // Pilihan hanya Medium atau Premium
+        message: 'Jenis produk hanya bisa Medium atau Premium'
     },
 
     harga: {
         type: Number,
         required: [true, 'Mohon masukkan harga produk'],
-        maxLength: [5, 'harga produk tidak boleh lebih dari 5 karakter'],
+    },
+
+    berat: {
+        type: Number, // Dalam kilogram (kg)
+        required: [true, 'Mohon masukkan berat produk'],
+    },
+
+    kemasan: {
+        type: String,
+        default: 'Karung', // Hanya ada satu jenis kemasan
+        immutable: true // Tidak bisa diubah
     },
 
     deskripsi: {
@@ -40,7 +57,6 @@ const productSchema = new mongoose.Schema({
     stok: {
         type: Number,
         required: [true, 'Mohon masukkan stok produk'],
-        maxLength: [5, 'stok produk tidak boleh lebih dari 5 karakter'],
         default: 0
     },
 
@@ -51,15 +67,15 @@ const productSchema = new mongoose.Schema({
 
     review: [
         {
-            name : {
+            name: {
                 type: String,
                 required: true
             },
-            rating : {
+            rating: {
                 type: Number,
                 required: true
             },
-            comment : {
+            comment: {
                 type: String,
                 required: true
             }
@@ -70,7 +86,6 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-
-})
+});
 
 module.exports = mongoose.model('Product', productSchema);
