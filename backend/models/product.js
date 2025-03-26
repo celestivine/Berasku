@@ -11,24 +11,26 @@ const productSchema = new mongoose.Schema({
     jenis: {
         type: String,
         required: true,
-        enum: ['Medium', 'Premium'], // Pilihan hanya Medium atau Premium
+        enum: ['Medium', 'Premium'], 
         message: 'Jenis produk hanya bisa Medium atau Premium'
     },
 
     harga: {
         type: Number,
         required: [true, 'Mohon masukkan harga produk'],
+        maxLength: [5, 'Harga produk tidak boleh lebih dari 5 digit'],
+        default: 0.0
     },
 
     berat: {
-        type: Number, // Dalam kilogram (kg)
+        type: Number, 
         required: [true, 'Mohon masukkan berat produk'],
     },
 
     kemasan: {
         type: String,
-        default: 'Karung', // Hanya ada satu jenis kemasan
-        immutable: true // Tidak bisa diubah
+        default: 'Karung', 
+        immutable: true 
     },
 
     deskripsi: {
