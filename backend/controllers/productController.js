@@ -61,8 +61,9 @@ exports.getSingleProduct = catchAsyncErrors (async (req, res, next) => {
 // Update Product => /api/v1/product/:id
 exports.updateProduct = catchAsyncErrors (async (req, res, next) => {
     try {
-        let product = await Product.findById(req.params.id);
 
+        let product = await Product.findById(req.params.id); 
+        console.log('Product:', product);
         if (!product) {
             return res.status(404).json({
                 success: false,
@@ -94,18 +95,29 @@ exports.updateProduct = catchAsyncErrors (async (req, res, next) => {
 
 
 // Delete Product => /api/v1/admin/product/:id
-exports.deleteProduct = catchAsyncErrors (async (req, res, next) => {
+exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
     try {
+
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID produk tidak valid'
+            });
+        }
+
         const product = await Product.findById(req.params.id);
+        console.log('Product:', product);
 
         if (!product) {
+            console.log('Produk tidak ditemukan');
             return res.status(404).json({
                 success: false,
                 message: 'Produk tidak ditemukan'
             });
         }
 
-        await product.deleteOne(); 
+        await product.deleteOne();
+        console.log('Produk berhasil dihapus');
 
         res.status(200).json({
             success: true,
@@ -113,12 +125,14 @@ exports.deleteProduct = catchAsyncErrors (async (req, res, next) => {
         });
 
     } catch (error) {
+        console.error('Error saat deleteProduct:', error);
         res.status(500).json({
             success: false,
             message: 'Server Error'
         });
     }
 });
+
 
 
 // Get alll producs => /api/v1/products?keyword=Medium
